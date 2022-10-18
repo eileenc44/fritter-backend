@@ -56,6 +56,24 @@ class FollowerCollection {
     static async deleteOne(followerId: Types.ObjectId | string, followeeId: Types.ObjectId | string): Promise<void> {
         await FollowModel.deleteOne({ follower: followerId, followee: followeeId });
     }
+
+    /**
+     * Unfollow everyone
+     *
+     * @param {string} followerId - The id of the follower
+     */
+     static async deleteAllFollowersOfUser(followerId: Types.ObjectId | string): Promise<void> {
+        await FollowModel.deleteOne({ follower: followerId});
+    }
+
+    /**
+     * All followees of user unfollow user
+     *
+     * @param {string} followeeId - The id of the followee
+     */
+     static async deleteAllFolloweesOfUser(followeeId: Types.ObjectId | string): Promise<void> {
+        await FollowModel.deleteOne({ followee: followeeId});
+    }
 }
 
 export default FollowerCollection;
