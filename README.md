@@ -169,8 +169,6 @@ within the schema. This tells us that the `content` field must have type `String
 
 ## API routes
 
-The following api routes have already been implemented for you (**Make sure to document all the routes that you have added.**):
-
 #### `GET /`
 
 This renders the `index.html` file that will be used to interact with the backend
@@ -181,11 +179,21 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - An array of all freets sorted in descending order by date modified
 
-#### `GET /api/freets?author=USERNAME` - Get freets by author
+#### `GET /api/freets/anonymous` - Get all anonymous freets of the logged in user
 
 **Returns**
 
-- An array of freets created by user with username `author`
+- An array of all anonymous freets by the user that's logged in
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `GET /api/freets?author=USERNAME` - Get not anonymous freets by author
+
+**Returns**
+
+- An array of freets created by user with username `author` and are not anonymous
 
 **Throws**
 
@@ -197,6 +205,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Body**
 
 - `content` _{string}_ - The content of the freet
+- `anonymous` _{boolean}_ - If the freet is anonymous
 
 **Returns**
 
@@ -226,6 +235,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Body**
 
 - `content` _{string}_ - The new content of the freet
+- `anonymous` _{boolean}_ - If the freet is anonymous
 
 **Returns**
 
@@ -313,3 +323,166 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+#### `GET /api/follow?followeeName=USERNAME` - Get all the followers of user
+
+**Returns**
+
+- An array of the followers of user with username `followee`
+
+**Throws**
+
+- `400` if `follower` is not given
+- `404` if `follower` is not a recognized username of any user
+
+#### `GET /api/follow?followerName=USERNAME` - Get all the followees of user (all the people user follows)
+
+**Returns**
+
+- An array of the users that the user with username `followee` follows
+
+**Throws**
+
+- `400` if `followee` is not given
+- `404` if `followee` is not a recognized username of any user
+
+#### `POST /api/follow` - Follow a user
+
+**Body**
+
+- `followeeName`  _{string}_ - The followee's username
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `400` if `followee` is not given or user tries to follow themself
+- `403` if the user is not logged in
+- `404` if the `followeeName` is not found
+
+#### `DELETE /api/follow?followeeName=USERNAME` - Unfollow a user
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if `followee` is not given
+- `404` if `followee` is not a recognized username of any user
+
+#### `GET /api/wordFilter` - Get all words in Word Filter
+
+**Returns**
+
+- An array of words to that are filtered for the user that's logged in
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/wordFilter` - Add a new word to filter
+
+**Body**
+
+- `word` _{string}_ - The new word to add
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the new word is empty or a stream of empty spaces
+- `413` if the new word is more than 30 characters long
+
+#### `DELETE /api/wordFilter/:word?` - Delete a word to filter
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the word is invalid
+
+#### `GET /groups` - Get all groups
+
+**Returns**
+
+- An array of all groups
+
+#### `GET /api/groups?creater=USERNAME` - Get groups created by user
+
+**Returns**
+
+- An array of groups created by user with username `creater`
+
+**Throws**
+
+- `400` if `creater` is not given
+- `404` if `creater` is not a recognized username of any user
+
+#### `GET /api/groups?member=USERNAME` - Get groups that user is a member in
+
+**Returns**
+
+- An array of groups that a user with username `member` is a member of
+
+**Throws**
+
+- `400` if `member` is not given
+- `404` if `member` is not a recognized username of any user
+
+#### `POST /api/groups` - Create a new group
+
+**Body**
+
+- `name` _{string}_ - The name of group
+
+**Returns**
+
+- A success message
+- A object with the created group
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If the group name is empty or a stream of empty spaces
+- `413` If the group name is more than 50 characters long
+
+#### `DELETE /api/groups/:groupId?` - Delete an existing group
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not the creater of the group
+- `404` if the groupId is invalid
+
+#### `PUT /api/groups/:groupId?` - Update an existing group
+
+**Body**
+
+- `name` _{string}_ - The new name of the group
+
+**Returns**
+
+- A success message
+- An object with the updated group
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the groupId is invalid
+- `403` if the user is not the creater of the freet
+- `400` if the new group name is empty or a stream of empty spaces
+- `413` if the new group name is more than 50 characters long
