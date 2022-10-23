@@ -409,7 +409,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
-- `404` if the word is invalid
+- `400` if the word is not in user's word filter
 
 #### `GET /groups` - Get all groups
 

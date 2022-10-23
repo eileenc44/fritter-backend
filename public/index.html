@@ -8,6 +8,7 @@
   <script src="/scripts/freet.js"></script>
   <script src="/scripts/user.js"></script>
   <script src="/scripts/follow.js"></script>
+  <script src="/scripts/wordFilter.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -153,6 +154,29 @@
             <input id="followeeName" name="followeeName">
           </div>
           <input type="submit" value="UnFollow">
+        </form>
+
+        <form id="view-all-filtered-words">
+          <h3>View All Filtered Words</h3>
+          <input type="submit" value="View">
+        </form>
+
+        <form id="add-word-to-filter">
+          <h3>Add a Word to Filter</h3>
+          <div>
+            <label for="word">Word:</label>
+            <input id="word" name="word">
+          </div>
+          <input type="submit" value="Add">
+        </form>
+
+        <form id="delete-word-from-filter">
+          <h3>Delete a Word from Filter</h3>
+          <div>
+            <label for="word">Word:</label>
+            <input id="word" name="word">
+          </div>
+          <input type="submit" value="Delete">
         </form>
 
       </div>

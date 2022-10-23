@@ -19,12 +19,11 @@ const FollowSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true
   },
-  // The user's password
   followee: {
     type: Schema.Types.ObjectId,
     required: true
   }
 });
 
-const FollowModel = model<Follow>('Follower', FollowSchema);
+const FollowModel = model<Follow>('Follow', FollowSchema);
 export default FollowModel;

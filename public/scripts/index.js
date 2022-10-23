@@ -42,7 +42,10 @@ const formsAndHandlers = {
   'view-followers': viewFollowers,
   'view-followees': viewFollowees,
   'follow-user': followUser,
-  'unfollow-user': unfollowUser
+  'unfollow-user': unfollowUser,
+  'view-all-filtered-words': viewAllFilteredWords,
+  'add-word-to-filter': addWordToFilter,
+  'delete-word-from-filter': deleteWordFromFilter
 };
 
 // Attach handlers to forms
