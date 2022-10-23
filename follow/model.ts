@@ -4,24 +4,26 @@ import type {User} from '../user/model';
 
 export type Follow = {
   _id: Types.ObjectId;
-  follower: Types.ObjectId;
-  followee: Types.ObjectId;
+  followerId: Types.ObjectId;
+  followeeId: Types.ObjectId;
 };
 
 export type PopulatedFollow = {
     _id: Types.ObjectId;
-    follower: User;
-    followee: User;
+    followerId: User;
+    followeeId: User;
   };
 
 const FollowSchema = new Schema({
-  follower: {
+  followerId: {
     type: Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'User'
   },
-  followee: {
+  followeeId: {
     type: Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'User'
   }
 });
 

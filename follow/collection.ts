@@ -11,9 +11,9 @@ class FollowerCollection {
      * @return {Promise<HydratedDocument<Follow>>} - The newly created follower relationship
      */
     static async addOne(followerId: Types.ObjectId | string, followeeId: Types.ObjectId | string): Promise<HydratedDocument<Follow>> {
-        const follow = new FollowModel({follower: followerId, followee: followeeId})
+        const follow = new FollowModel({followerId: followerId, followeeId: followeeId})
         await follow.save();
-        return follow;
+        return (await follow.populate('followerId')).populate('followeeId');
     }
 
     /**
@@ -24,7 +24,7 @@ class FollowerCollection {
      * @return {Promise<HydratedDocument<Follow>[]> | Promise<null>} - The newly created follower relationship
      */
      static async findFollowerFolloweePair(followerId: Types.ObjectId | string, followeeId: Types.ObjectId | string): Promise<HydratedDocument<Follow>[]> {
-        return await FollowModel.findOne({follower: followerId, followee: followeeId});
+        return FollowModel.findOne({followerId: followerId, followeeId: followeeId}).populate('followerId').populate('followeeId');
     }
 
     /**
@@ -34,7 +34,7 @@ class FollowerCollection {
      * @return {Promise<HydratedDocument<Follow>[]> | Promise<null>} - An array of followers
      */
     static async findAllFollowersOfUser(followeeId: Types.ObjectId | string): Promise<HydratedDocument<Follow>[]> {
-        return await FollowModel.find({ followee: followeeId });
+        return FollowModel.find({ followeeId: followeeId }).populate('followerId').populate('followeeId');
     }
 
     /**
@@ -44,7 +44,7 @@ class FollowerCollection {
      * @return {Promise<HydratedDocument<Follow>[]> | Promise<null>} - An array of users that are followed by followerId
      */
     static async findAllUsersFollowersByUser(followerId: Types.ObjectId | string): Promise<HydratedDocument<Follow>[]> {
-        return await FollowModel.find({ follower: followerId });
+        return FollowModel.find({ followerId: followerId }).populate('followerId').populate('followeeId');
     }
 
     /**
@@ -54,7 +54,7 @@ class FollowerCollection {
      * @param {string} followeeId - The id of the followee
      */
     static async deleteOne(followerId: Types.ObjectId | string, followeeId: Types.ObjectId | string): Promise<void> {
-        await FollowModel.deleteOne({ follower: followerId, followee: followeeId });
+        await FollowModel.deleteOne({ followerId: followerId, followeeId: followeeId });
     }
 
     /**
@@ -63,7 +63,7 @@ class FollowerCollection {
      * @param {string} followerId - The id of the follower
      */
      static async deleteAllFollowersOfUser(followerId: Types.ObjectId | string): Promise<void> {
-        await FollowModel.deleteOne({ follower: followerId});
+        await FollowModel.deleteOne({ followerId: followerId});
     }
 
     /**
@@ -72,7 +72,7 @@ class FollowerCollection {
      * @param {string} followeeId - The id of the followee
      */
      static async deleteAllFolloweesOfUser(followeeId: Types.ObjectId | string): Promise<void> {
-        await FollowModel.deleteOne({ followee: followeeId});
+        await FollowModel.deleteOne({ followeeId: followeeId});
     }
 }
 

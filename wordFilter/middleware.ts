@@ -9,8 +9,7 @@ import WordFilterCollection from './collection';
  */
 const isValidWord = async (req: Request, res: Response, next: NextFunction) => {
   const {word} = req.body as {word: string};
-  const foundWord = await WordFilterCollection.findOneWord(req.session.userId, word);
-  console.log(foundWord);
+  const foundWord = await WordFilterCollection.findOneWord(req.session.userId as string, word);
   if (foundWord) {
     res.status(400).json({
       error: 'Word is already in your word filter'
@@ -39,7 +38,7 @@ const isValidWord = async (req: Request, res: Response, next: NextFunction) => {
  * Checks that the word is in word filter
  */
 const isWordInWordFilter = async (req: Request, res: Response, next: NextFunction) => {
-  const wordFound = await WordFilterCollection.findOneWord(req.session.userId, req.params.word);
+  const wordFound = await WordFilterCollection.findOneWord(req.session.userId as string, req.params.word);
   if (!wordFound) {
     res.status(400).json({
       error: 'Word is not in your word filter'

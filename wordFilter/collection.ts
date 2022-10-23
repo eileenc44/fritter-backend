@@ -11,9 +11,9 @@ class WordFilterCollection {
      * @return {Promise<HydratedDocument<WordFilter>>} - The newly created follower relationship
      */
     static async addOne(userId: Types.ObjectId | string, word: string): Promise<HydratedDocument<WordFilter>> {
-        const wordFilter = new WordFilterModel({user: userId, word: word})
+        const wordFilter = new WordFilterModel({userId: userId, word: word})
         await wordFilter.save();
-        return wordFilter;
+        return wordFilter.populate('userId');
     }
 
     /**
@@ -23,7 +23,7 @@ class WordFilterCollection {
      * @return {Promise<HydratedDocument<Follow>[]> | Promise<null>} - An array of followers
      */
     static async findAllWords(userId: Types.ObjectId | string): Promise<HydratedDocument<WordFilter>[]> {
-        return await WordFilterModel.find({ user: userId });
+        return WordFilterModel.find({ userId: userId }).populate('userId');
     }
 
     /**
@@ -34,7 +34,7 @@ class WordFilterCollection {
      * @return {Promise<HydratedDocument<Follow>[]> | Promise<null>} - An array of followers
      */
      static async findOneWord(userId: Types.ObjectId | string, word: string): Promise<HydratedDocument<WordFilter>[]> {
-        return await WordFilterModel.findOne({ user: userId, word: word });
+        return WordFilterModel.findOne({ userId: userId, word: word }).populate('userId');
     }
 
     /**
@@ -44,7 +44,7 @@ class WordFilterCollection {
      * @param {string} word - The word to add
      */
     static async deleteOne(userId: Types.ObjectId | string, word: string): Promise<void> {
-        await WordFilterModel.deleteOne({ user: userId, word: word });
+        await WordFilterModel.deleteOne({ userId: userId, word: word });
     }
 
     /**
@@ -53,7 +53,7 @@ class WordFilterCollection {
      * @param {string} userId - The id of the user
      */
      static async deleteAll(userId: Types.ObjectId | string): Promise<void> {
-        await WordFilterModel.deleteOne({ user: userId});
+        await WordFilterModel.deleteOne({ userId: userId});
     }
 }
 

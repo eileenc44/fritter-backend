@@ -4,6 +4,7 @@ import * as userValidator from '../user/middleware';
 import * as followerValidator from './middleware';
 import FollowerCollection from './collection';
 import UserCollection from '../user/collection';
+import * as util from './util';
 
 const router = express.Router();
 
@@ -32,12 +33,14 @@ const router = express.Router();
   async (req: Request, res: Response) => {
     if (req.query.followee !== undefined) {
       const followee = await UserCollection.findOneByUsername(req.query.followee as string);
-      const response = await FollowerCollection.findAllFollowersOfUser(followee._id);
+      const follows = await FollowerCollection.findAllFollowersOfUser(followee._id);
+      const response = follows.map(util.constructFollowResponse);
       res.status(200).json(response);
     }
     else if (req.query.follower !== undefined) {
       const follower = await UserCollection.findOneByUsername(req.query.follower as string);
-      const response = await FollowerCollection.findAllUsersFollowersByUser(follower._id);
+      const follows = await FollowerCollection.findAllUsersFollowersByUser(follower._id);
+      const response = follows.map(util.constructFollowResponse);
       res.status(200).json(response);
     }
   }
@@ -63,9 +66,10 @@ router.post(
   async (req: Request, res: Response) => {
     const followerId = (req.session.userId as string) ?? '';
     const followeeId = (await UserCollection.findOneByUsername(req.body.followeeName))._id;
-    await FollowerCollection.addOne(followerId, followeeId);
+    const follow = await FollowerCollection.addOne(followerId, followeeId);
     res.status(201).json({
       message: 'You have followed successfully.',
+      follow: util.constructFollowResponse(follow)
     });
   }
 );

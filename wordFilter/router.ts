@@ -3,6 +3,7 @@ import express from 'express';
 import * as userValidator from '../user/middleware';
 import * as wordFilterValidator from './middleware';
 import WordFilterCollection from './collection';
+import * as util from './util';
 
 const router = express.Router();
 
@@ -21,7 +22,8 @@ const router = express.Router();
     userValidator.isUserLoggedIn
   ],
   async (req: Request, res: Response) => {
-    const response = await WordFilterCollection.findAllWords(req.session.userId);
+    const allWords = await WordFilterCollection.findAllWords(req.session.userId as string);
+    const response = allWords.map(util.constructWordFilterResponse);
     res.status(200).json(response);
   }
 );
@@ -41,12 +43,13 @@ router.post(
   '/',
   [
     userValidator.isUserLoggedIn,
-    wordFilterValidator.isValidWord
+    // wordFilterValidator.isValidWord
   ],
   async (req: Request, res: Response) => {
-    await WordFilterCollection.addOne(req.session.userId, req.body.word);
+    const wordFilter = await WordFilterCollection.addOne(req.session.userId as string, req.body.word);
     res.status(201).json({
       message: 'You have added a word successfully.',
+      wordFilter: util.constructWordFilterResponse(wordFilter)
     });
   }
 );
@@ -68,7 +71,7 @@ router.delete(
     wordFilterValidator.isWordInWordFilter
   ],
   async (req: Request, res: Response) => {
-    await WordFilterCollection.deleteOne(req.session.userId, req.params.word);
+    await WordFilterCollection.deleteOne(req.session.userId as string, req.params.word);
     res.status(200).json({
       message: 'You have removed a word successfully.'
     });
