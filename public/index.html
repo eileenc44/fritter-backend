@@ -9,6 +9,7 @@
   <script src="/scripts/user.js"></script>
   <script src="/scripts/follow.js"></script>
   <script src="/scripts/wordFilter.js"></script>
+  <script src="/scripts/group.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -177,6 +178,87 @@
             <input id="word" name="word">
           </div>
           <input type="submit" value="Delete">
+        </form>
+
+        <form id="view-all-groups">
+          <h3>View All Groups</h3>
+          <input type="submit" value="View">
+        </form>
+
+        <form id="view-groups-by-name">
+          <h3>View All Groups by Name</h3>
+          <div>
+            <label for="groupName">Name:</label>
+            <input id="groupName" name="groupName">
+          </div>
+          <input type="submit" value="View">
+        </form>
+
+        <form id="view-groups-by-creator">
+          <h3>View All Groups by Creator</h3>
+          <div>
+            <label for="creator">Creator:</label>
+            <input id="creator" name="creator">
+          </div>
+          <input type="submit" value="View">
+        </form>
+
+        <form id="view-groups-by-member">
+          <h3>View All Groups by Member</h3>
+          <div>
+            <label for="member">Member:</label>
+            <input id="member" name="member">
+          </div>
+          <input type="submit" value="View">
+        </form>
+
+        <form id="create-group">
+          <h3>Create Group</h3>
+          <div>
+            <label for="name">Name:</label>
+            <input id="name" name="name">
+          </div>
+          <input type="submit" value="Create Group">
+        </form>
+
+        <form id="edit-group">
+          <h3>Edit Group Name</h3>
+          <div>
+            <label for="groupId">ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <div>
+            <label for="name">Name:</label>
+            <input id="name" name="name"></input>
+          </div>
+          <input type="submit" value="Edit Group">
+        </form>
+
+        <form id="join-group">
+          <h3>Join Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <input type="submit" value="Join Group">
+        </form>
+
+        <form id="leave-group">
+          <h3>Leave Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <input type="submit" value="Leave Group">
+        </form>
+
+        <form id="delete-group">
+          <h3>Delete Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <input type="submit" value="Delete Group">
         </form>
 
       </div>

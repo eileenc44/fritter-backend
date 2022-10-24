@@ -417,16 +417,22 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - An array of all groups
 
-#### `GET /api/groups?creater=USERNAME` - Get groups created by user
+#### `GET /api/groups?groupName=NAME` - Get a group by name
 
 **Returns**
 
-- An array of groups created by user with username `creater`
+- A group
+
+#### `GET /api/groups?creator=USERNAME` - Get groups created by user
+
+**Returns**
+
+- An array of groups created by user with username `creator`
 
 **Throws**
 
-- `400` if `creater` is not given
-- `404` if `creater` is not a recognized username of any user
+- `400` if `creator` is not given
+- `404` if `creator` is not a recognized username of any user
 
 #### `GET /api/groups?member=USERNAME` - Get groups that user is a member in
 
@@ -465,7 +471,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
-- `403` if the user is not the creater of the group
+- `403` if the user is not the creator of the group
 - `404` if the groupId is invalid
 
 #### `PUT /api/groups/:groupId?` - Update an existing group
@@ -483,6 +489,32 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 - `404` if the groupId is invalid
-- `403` if the user is not the creater of the freet
+- `403` if the user is not the creator of the group
 - `400` if the new group name is empty or a stream of empty spaces
 - `413` if the new group name is more than 50 characters long
+
+#### `PUT /api/groups/:groupsId?/join` - Join a group
+
+**Returns**
+
+- A success message
+- An object with the updated group
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the groupId is invalid
+- `400` if the user is already a member of the group
+
+#### `PUT /api/groups/:groupsId?/leave` - Leave a group
+
+**Returns**
+
+- A success message
+- An object with the updated group
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the groupId is invalid
+- `400` if the user is not a member of the group

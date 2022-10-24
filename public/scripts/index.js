@@ -45,7 +45,16 @@ const formsAndHandlers = {
   'unfollow-user': unfollowUser,
   'view-all-filtered-words': viewAllFilteredWords,
   'add-word-to-filter': addWordToFilter,
-  'delete-word-from-filter': deleteWordFromFilter
+  'delete-word-from-filter': deleteWordFromFilter,
+  'view-all-groups': viewAllGroups,
+  'view-groups-by-name': viewGroupsByName,
+  'view-groups-by-creator': viewGroupsByCreator,
+  'view-groups-by-member': viewGroupsByMember,
+  'create-group': createGroup,
+  'edit-group': editGroup,
+  'join-group': joinGroup,
+  'leave-group': leaveGroup,
+  'delete-group': deleteGroup
 };
 
 // Attach handlers to forms
