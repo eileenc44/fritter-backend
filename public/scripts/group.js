@@ -36,6 +36,12 @@ function editGroup(fields) {
     .catch(showResponse);
 }
 
+function deleteGroup(fields) {
+  fetch(`/api/groups/${fields.groupId}`, {method: 'DELETE'})
+    .then(showResponse)
+    .catch(showResponse);
+}
+
 function joinGroup(fields) {
   fetch(`/api/groups/${fields.groupId}/join`, {method: 'PUT', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
     .then(showResponse)
@@ -47,10 +53,14 @@ function leaveGroup(fields) {
     .then(showResponse)
     .catch(showResponse);
 }
-
-function deleteGroup(fields) {
-  fetch(`/api/groups/${fields.groupId}`, {method: 'DELETE'})
+function addFreet(fields) {
+  fetch(`/api/groups/${fields.groupId}/addFreet`, {method: 'PUT', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
     .then(showResponse)
     .catch(showResponse);
 }
-  
+
+function deleteFreet(fields) {
+  fetch(`/api/groups/${fields.groupId}/deleteFreet`, {method: 'PUT', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
+    .then(showResponse)
+    .catch(showResponse);
+}

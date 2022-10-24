@@ -4,6 +4,7 @@ import GroupCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as groupValidator from '../group/middleware';
 import * as util from './util';
+import FreetCollection from '../freet/collection';
 
 const router = express.Router();
 
@@ -139,6 +140,36 @@ router.delete(
 );
 
 /**
+ * Modify group name
+ *
+ * @name PUT /api/groups/:id
+ *
+ * @param {string} name - the new name for the group
+ * @return {GroupResponse} - the updated group
+ * @throws {403} - if the user is not logged in or not the creator of
+ *                 of the group
+ * @throws {404} - If the groupId is not valid
+ * @throws {400} - If the group name is empty or a stream of empty spaces
+ * @throws {413} - If the group name is more than 50 characters long
+ */
+ router.put(
+  '/:groupId?',
+  [
+    userValidator.isUserLoggedIn,
+    groupValidator.isGroupExists,
+    groupValidator.isValidGroupModifier,
+    groupValidator.isValidGroupName,
+  ],
+  async (req: Request, res: Response) => {
+    const group = await GroupCollection.updateOne(req.params.groupId, req.body.name);
+    res.status(200).json({
+      message: 'Your group was updated successfully.',
+      group: util.constructGroupResponse(group)
+    });
+  }
+);
+
+/**
  * Add a member to a group
  *
  * @name PUT /api/groups/:id
@@ -153,7 +184,7 @@ router.put(
   [
     userValidator.isUserLoggedIn,
     groupValidator.isGroupExists,
-    groupValidator.isValidJoin
+    groupValidator.isNotGroupMember
   ],
   async (req: Request, res: Response) => {
     const group = await GroupCollection.addGroupMember(req.params.groupId as string, req.session.userId as string);
@@ -178,7 +209,7 @@ router.put(
   [
     userValidator.isUserLoggedIn,
     groupValidator.isGroupExists,
-    groupValidator.isValidLeave
+    groupValidator.isValidGroupMember
   ],
   async (req: Request, res: Response) => {
     const group = await GroupCollection.removeGroupMember(req.params.groupId as string, req.session.userId as string);
@@ -190,30 +221,61 @@ router.put(
 );
 
 /**
- * Modify group name
+ * Add a freet to a group
  *
- * @name PUT /api/groups/:id
+ * @name PUT /api/groups/:id/addFreet
  *
- * @param {string} name - the new name for the group
+ * @param {string} freetId - the if of the freet to add
  * @return {GroupResponse} - the updated group
- * @throws {403} - if the user is not logged in or not the creator of
- *                 of the group
- * @throws {404} - If the groupId is not valid
- * @throws {400} - If the group name is empty or a stream of empty spaces
- * @throws {413} - If the group name is more than 50 characters long
+ * @throws {403} - if the user is not logged in
+ * @throws {404} - if the groupId is not valid
+ * @throws {403} - If the user is not the author of the freet or is not a member of the group
  */
-router.put(
-  '/:groupId?',
+ router.put(
+  '/:groupId?/addFreet',
   [
     userValidator.isUserLoggedIn,
     groupValidator.isGroupExists,
-    groupValidator.isValidGroupModifier,
-    groupValidator.isValidGroupName
+    groupValidator.isFreetExists,
+    groupValidator.isValidFreetModifier,
+    groupValidator.isValidGroupMember,
+    groupValidator.isFreetNotInGroup
   ],
   async (req: Request, res: Response) => {
-    const group = await GroupCollection.updateOne(req.params.groupId, req.body.name);
+    const group = await GroupCollection.addFreet(req.params.groupId as string, req.body.freetId as string);
     res.status(200).json({
-      message: 'Your group was updated successfully.',
+      message: 'You have joined the group.',
+      group: util.constructGroupResponse(group)
+    });
+  }
+);
+
+/**
+ * Delete a freet from a group
+ *
+ * @name PUT /api/groups/:id/deleteFreet
+ *
+ * @param {string} freetId - the if of the freet to delete
+ * @return {GroupResponse} - the updated group
+ * @throws {403} - if the user is not logged in
+ * @throws {404} - If the groupId is not valid
+ * @throws {403} - If the user is not the author of the freet or is not a member of the group
+ */
+router.put(
+  '/:groupId?/deleteFreet',
+  [
+    userValidator.isUserLoggedIn,
+    groupValidator.isGroupExists,
+    groupValidator.isFreetExists,
+    groupValidator.isValidFreetModifier,
+    groupValidator.isValidGroupMember,
+    groupValidator.isFreetInGroup
+  ],
+  async (req: Request, res: Response) => {
+    const group = await GroupCollection.removeFreet(req.params.groupId as string, req.body.freetId as string);
+    await FreetCollection.deleteOne(req.body.freetId); // synchoronized with deleting freet
+    res.status(200).json({
+      message: 'You have deleted the freet.',
       group: util.constructGroupResponse(group)
     });
   }

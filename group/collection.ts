@@ -73,6 +73,28 @@ class GroupCollection {
     const member = await UserCollection.findOneByUsername(username);
     return GroupModel.find({members: member._id}).populate('creatorId').populate('members').populate('freets');
   }
+  
+  /**
+   * Find member in gorup
+   *
+   * @param {string} groupId - The id of the group
+   * @param {string} userId - The id of the user
+   * @return {Promise<HydratedDocument<Group>[]>} - An array of all of the groups that a member is in
+   */
+   static async findOneMemberInGroup(groupId: Types.ObjectId | string, userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Group>>> {
+    return GroupModel.findOne({_id: groupId, members: userId}).populate('creatorId').populate('members').populate('freets');
+  }
+
+  /**
+   * Find member in group
+   *
+   * @param {string} groupId - The id of the group
+   * @param {string} freetId - The id of the freet
+   * @return {Promise<HydratedDocument<Group>[]>} - An array of all of the groups that a member is in
+   */
+   static async findOneFreetInGroup(groupId: Types.ObjectId | string, freetId: Types.ObjectId | string): Promise<Array<HydratedDocument<Group>>> {
+    return GroupModel.findOne({_id: groupId, freets: freetId}).populate('creatorId').populate('members').populate('freets');
+  }
 
   /**
    * Update a group with new name
@@ -110,6 +132,30 @@ class GroupCollection {
    */
    static async removeGroupMember(groupId: Types.ObjectId | string, userId: Types.ObjectId | string): Promise<HydratedDocument<Group>> {
     await GroupModel.updateOne({_id: groupId}, {$pull: {members: userId}});
+    return await GroupModel.findOne({_id: groupId}).populate('creatorId').populate('members').populate('freets');
+  }
+
+  /**
+   * Add a freet to a group
+   *
+   * @param {string} groupId - The id of the group to be updated
+   * @param {string} freetId - The id of the freet to be added
+   * @return {Promise<HydratedDocument<Group>>} - The newly updated group
+   */
+   static async addFreet(groupId: Types.ObjectId | string, freetId: Types.ObjectId | string): Promise<HydratedDocument<Group>> {
+    await GroupModel.updateOne({_id: groupId}, {$push: {freets: freetId}});
+    return await GroupModel.findOne({_id: groupId}).populate('creatorId').populate('members').populate('freets');
+  }
+
+  /**
+   * Remove a freet from a group
+   *
+   * @param {string} groupId - The id of the group to be updated
+   * @param {string} freetId - The id of the freet to be added
+   * @return {Promise<HydratedDocument<Group>>} - The newly updated group
+   */
+   static async removeFreet(groupId: Types.ObjectId | string, freetId: Types.ObjectId | string): Promise<HydratedDocument<Group>> {
+    await GroupModel.updateOne({_id: groupId}, {$pull: {freets: freetId}});
     return await GroupModel.findOne({_id: groupId}).populate('creatorId').populate('members').populate('freets');
   }
 

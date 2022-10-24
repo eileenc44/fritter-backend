@@ -234,6 +234,15 @@
           <input type="submit" value="Edit Group">
         </form>
 
+        <form id="delete-group">
+          <h3>Delete Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <input type="submit" value="Delete Group">
+        </form>
+
         <form id="join-group">
           <h3>Join Group</h3>
           <div>
@@ -252,13 +261,30 @@
           <input type="submit" value="Leave Group">
         </form>
 
-        <form id="delete-group">
-          <h3>Delete Group</h3>
+        <form id="add-freet-to-group">
+          <h3>Add a Freet to a Group</h3>
           <div>
             <label for="groupId">Group ID:</label>
             <input id="groupId" name="groupId">
           </div>
-          <input type="submit" value="Delete Group">
+          <div>
+            <label for="freetId">Freet ID:</label>
+            <input id="freetId" name="freetId">
+          </div>
+          <input type="submit" value="Add Freet">
+        </form>
+
+        <form id="delete-freet-from-group">
+          <h3>Delete a Freet from a Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <div>
+            <label for="freetId">Freet ID:</label>
+            <input id="freetId" name="freetId">
+          </div>
+          <input type="submit" value="Delete Freet">
         </form>
 
       </div>

@@ -52,9 +52,11 @@ const formsAndHandlers = {
   'view-groups-by-member': viewGroupsByMember,
   'create-group': createGroup,
   'edit-group': editGroup,
+  'delete-group': deleteGroup,
   'join-group': joinGroup,
   'leave-group': leaveGroup,
-  'delete-group': deleteGroup
+  'add-freet-to-group': addFreet,
+  'delete-freet-from-group': deleteFreet
 };
 
 // Attach handlers to forms

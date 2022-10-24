@@ -518,3 +518,37 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not logged in
 - `404` if the groupId is invalid
 - `400` if the user is not a member of the group
+
+#### `PUT /api/groups/:groupsId?/addFreet` - Post a Freet in a group
+
+**Body**
+
+- `freetId` _{string}_ - The id of the freet
+
+**Returns**
+
+- A success message
+- An object with the updated group
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the groupId is invalid
+- `403` if the user is not the author of the freet or is not a member of the group
+
+#### `PUT /api/groups/:groupsId?/deleteFreet` - Delete a Freet in a group
+
+**Body**
+
+- `freetId` _{string}_ - The id of the freet
+
+**Returns**
+
+- A success message
+- An object with the updated group
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the groupId is invalid
+- `403` if the user is not the author of the freet or is not a member of the group

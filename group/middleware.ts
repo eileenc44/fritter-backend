@@ -2,6 +2,7 @@ import type {Request, Response, NextFunction} from 'express';
 import {Types} from 'mongoose';
 import GroupCollection from '../group/collection';
 import UserCollection from '../user/collection';
+import FreetCollection from '../freet/collection';
 
 /**
  * Checks if a group with groupId in req.params exists
@@ -85,9 +86,9 @@ const isValidGroupModifier = async (req: Request, res: Response, next: NextFunct
 /**
  * Checks if a user can join
  */
-const isValidJoin = async (req: Request, res: Response, next: NextFunction) => {
-  const group = await GroupCollection.findOne(req.params.groupId);
-  if (group.members.includes(req.session.userId)) {
+const isNotGroupMember = async (req: Request, res: Response, next: NextFunction) => {
+  const group = await GroupCollection.findOneMemberInGroup(req.params.groupId, req.session.userId);
+  if (group) {
     res.status(400).json({
       error: {
         groupNotFound: `You are already a member of this group.`
@@ -100,14 +101,82 @@ const isValidJoin = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
- * Checks if a user can join
+ * Checks if the current user is a member in a group whose groupId is in req.params
  */
-const isValidLeave = async (req: Request, res: Response, next: NextFunction) => {
-  const group = await GroupCollection.findOne(req.params.groupId);
-  if (!group.members.indexOf(req.session.userId)) {
+ const isValidGroupMember = async (req: Request, res: Response, next: NextFunction) => {
+  const group = await GroupCollection.findOneMemberInGroup(req.params.groupId, req.session.userId);
+  if (!group) {
     res.status(400).json({
       error: {
         groupNotFound: `You are not a member of this group.`
+      }
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
+ * Checks if freet exsits
+ */
+ const isFreetExists = async (req: Request, res: Response, next: NextFunction) => {
+  const validFormat = Types.ObjectId.isValid(req.body.freetId);
+  const freet = validFormat ? await FreetCollection.findOne(req.body.freetId) : '';
+  if (!freet) {
+    res.status(404).json({
+      error: {
+        freetNotFound: `Freet with freet ID ${req.body.freetId} does not exist.`
+      }
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
+ * Checks if the current user is the author of the freet whose freetId is in req.body
+ */
+ const isValidFreetModifier = async (req: Request, res: Response, next: NextFunction) => {
+  const freet = await FreetCollection.findOne(req.body.freetId);
+  const userId = freet.authorId._id;
+  if (req.session.userId !== userId.toString()) {
+    res.status(403).json({
+      error: 'Cannot modify other users\' freets.'
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
+ * Checks if a freet can be added
+ */
+const isFreetNotInGroup = async (req: Request, res: Response, next: NextFunction) => {
+  const group = await GroupCollection.findOneFreetInGroup(req.params.groupId, req.body.freetId);
+  if (group) {
+    res.status(400).json({
+      error: {
+        groupNotFound: `This freet is already in group.`
+      }
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
+ * Checks if a Freet is in group
+ */
+ const isFreetInGroup = async (req: Request, res: Response, next: NextFunction) => {
+  const group = await GroupCollection.findOneFreetInGroup(req.params.groupId, req.body.freetId);
+  if (!group) {
+    res.status(400).json({
+      error: {
+        groupNotFound: `This freet is not in the group.`
       }
     });
     return;
@@ -121,6 +190,10 @@ export {
   isGroupExists,
   isCreatorExists,
   isValidGroupModifier,
-  isValidJoin,
-  isValidLeave
+  isNotGroupMember,
+  isFreetExists,
+  isValidFreetModifier,
+  isValidGroupMember,
+  isFreetNotInGroup,
+  isFreetInGroup
 };

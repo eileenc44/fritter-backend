@@ -5,6 +5,8 @@ import FollowerCollection from '../follow/collection';
 import UserCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as util from './util';
+import WordFilterCollection from '../wordFilter/collection';
+import GroupCollection from '../group/collection';
 
 
 const router = express.Router();
@@ -145,6 +147,8 @@ router.delete(
     await FreetCollection.deleteMany(userId);
     await FollowerCollection.deleteAllFollowersOfUser(userId);
     await FollowerCollection.deleteAllFolloweesOfUser(userId);
+    await WordFilterCollection.deleteAll(userId);
+    await GroupCollection.deleteMany(userId);
     req.session.userId = undefined;
     res.status(200).json({
       message: 'Your account has been deleted successfully.'
