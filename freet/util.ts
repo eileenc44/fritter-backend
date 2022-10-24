@@ -37,7 +37,7 @@ const constructFreetResponse = (freet: HydratedDocument<Freet>): FreetResponse =
   return {
     ...freetCopy,
     _id: freetCopy._id.toString(),
-    author: username,
+    author: freetCopy.anonymous ? "anonymous" : username,
     dateCreated: formatDate(freet.dateCreated),
     dateModified: formatDate(freet.dateModified)
   };

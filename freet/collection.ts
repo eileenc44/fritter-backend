@@ -17,15 +17,17 @@ class FreetCollection {
    *
    * @param {string} authorId - The id of the author of the freet
    * @param {string} content - The id of the content of the freet
+   * @param {string} anonymous - Whether the freet is anonymous
    * @return {Promise<HydratedDocument<Freet>>} - The newly created freet
    */
-  static async addOne(authorId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Freet>> {
+  static async addOne(authorId: Types.ObjectId | string, content: string, anonymous: boolean): Promise<HydratedDocument<Freet>> {
     const date = new Date();
     const freet = new FreetModel({
       authorId,
       dateCreated: date,
       content,
-      dateModified: date
+      dateModified: date,
+      anonymous: anonymous
     });
     await freet.save(); // Saves freet to MongoDB
     return freet.populate('authorId');
@@ -69,9 +71,10 @@ class FreetCollection {
    * @param {string} content - The new content of the freet
    * @return {Promise<HydratedDocument<Freet>>} - The newly updated freet
    */
-  static async updateOne(freetId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Freet>> {
+  static async updateOne(freetId: Types.ObjectId | string, content: string, anonymous: boolean): Promise<HydratedDocument<Freet>> {
     const freet = await FreetModel.findOne({_id: freetId});
     freet.content = content;
+    freet.anonymous = anonymous;
     freet.dateModified = new Date();
     await freet.save();
     return freet.populate('authorId');

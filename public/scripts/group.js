@@ -53,13 +53,13 @@ function leaveGroup(fields) {
     .then(showResponse)
     .catch(showResponse);
 }
-function addFreet(fields) {
+function addFreetToGroup(fields) {
   fetch(`/api/groups/${fields.groupId}/addFreet`, {method: 'PUT', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
     .then(showResponse)
     .catch(showResponse);
 }
 
-function deleteFreet(fields) {
+function deleteFreetFromGroup(fields) {
   fetch(`/api/groups/${fields.groupId}/deleteFreet`, {method: 'PUT', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
     .then(showResponse)
     .catch(showResponse);

@@ -179,21 +179,11 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - An array of all freets sorted in descending order by date modified
 
-#### `GET /api/freets/anonymous` - Get all anonymous freets of the logged in user
+#### `GET /api/freets?author=USERNAME` - Get freets by author
 
 **Returns**
 
-- An array of all anonymous freets by the user that's logged in
-
-**Throws**
-
-- `403` if the user is not logged in
-
-#### `GET /api/freets?author=USERNAME` - Get not anonymous freets by author
-
-**Returns**
-
-- An array of freets created by user with username `author` and are not anonymous
+- An array of freets created by user with username `author`
 
 **Throws**
 
