@@ -55,7 +55,7 @@ const formsAndHandlers = {
   'delete-group': deleteGroup,
   'join-group': joinGroup,
   'leave-group': leaveGroup,
-  'add-freet-to-group': addFreetToGroup,
+  'create-group-freet': createGroupFreet,
   'delete-freet-from-group': deleteFreetFromGroup
 };
 

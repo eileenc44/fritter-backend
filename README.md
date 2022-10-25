@@ -509,28 +509,26 @@ This renders the `index.html` file that will be used to interact with the backen
 - `404` if the groupId is invalid
 - `400` if the user is not a member of the group
 
-#### `PUT /api/groups/:groupsId?/addFreet` - Post a Freet in a group
+#### `PUT /api/groups/:groupsId?/addFree` - Post a Freet in a group
 
 **Body**
 
-- `freetId` _{string}_ - The id of the freet
+- `content` _{string}_ - The content of the freet
+- `anonymous` _{boolean}_ - If the freet is anonymous
 
 **Returns**
 
 - A success message
-- An object with the updated group
+- A object with the updated group
 
 **Throws**
 
 - `403` if the user is not logged in
 - `404` if the groupId is invalid
-- `403` if the user is not the author of the freet or is not a member of the group
+- `400` If the freet content is empty or a stream of empty spaces
+- `413` If the freet content is more than 140 characters long
 
-#### `PUT /api/groups/:groupsId?/deleteFreet` - Delete a Freet in a group
-
-**Body**
-
-- `freetId` _{string}_ - The id of the freet
+#### `PUT /api/groups/:groupsId?/deleteFreet/:freetId?` - Delete a Freet in a group
 
 **Returns**
 

@@ -265,17 +265,19 @@
           <input type="submit" value="Leave Group">
         </form>
 
-        <form id="add-freet-to-group">
-          <h3>Add a Freet to a Group</h3>
+        <form id="create-group-freet">
+          <h3>Create Freet in Group</h3>
           <div>
             <label for="groupId">Group ID:</label>
             <input id="groupId" name="groupId">
           </div>
           <div>
-            <label for="freetId">Freet ID:</label>
-            <input id="freetId" name="freetId">
+            <label for="content">Content:</label>
+            <textarea id="content" name="content"></textarea>
+            <label for="anonymous">Checkbox for Anonymous:</label>
+            <input type="checkbox" name="anonymous" value="anonymous">
           </div>
-          <input type="submit" value="Add Freet">
+          <input type="submit" value="Create Group Freet">
         </form>
 
         <form id="delete-freet-from-group">

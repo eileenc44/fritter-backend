@@ -118,57 +118,6 @@ const isNotGroupMember = async (req: Request, res: Response, next: NextFunction)
 };
 
 /**
- * Checks if freet exsits
- */
- const isFreetExists = async (req: Request, res: Response, next: NextFunction) => {
-  const validFormat = Types.ObjectId.isValid(req.body.freetId);
-  const freet = validFormat ? await FreetCollection.findOne(req.body.freetId) : '';
-  if (!freet) {
-    res.status(404).json({
-      error: {
-        freetNotFound: `Freet with freet ID ${req.body.freetId} does not exist.`
-      }
-    });
-    return;
-  }
-
-  next();
-};
-
-/**
- * Checks if the current user is the author of the freet whose freetId is in req.body
- */
- const isValidFreetModifier = async (req: Request, res: Response, next: NextFunction) => {
-  const freet = await FreetCollection.findOne(req.body.freetId);
-  const userId = freet.authorId._id;
-  if (req.session.userId !== userId.toString()) {
-    res.status(403).json({
-      error: 'Cannot modify other users\' freets.'
-    });
-    return;
-  }
-
-  next();
-};
-
-/**
- * Checks if a freet can be added
- */
-const isFreetNotInGroup = async (req: Request, res: Response, next: NextFunction) => {
-  const group = await GroupCollection.findOneFreetInGroup(req.params.groupId, req.body.freetId);
-  if (group) {
-    res.status(400).json({
-      error: {
-        groupNotFound: `This freet is already in group.`
-      }
-    });
-    return;
-  }
-
-  next();
-};
-
-/**
  * Checks if a Freet is in group
  */
  const isFreetInGroup = async (req: Request, res: Response, next: NextFunction) => {
@@ -191,9 +140,6 @@ export {
   isCreatorExists,
   isValidGroupModifier,
   isNotGroupMember,
-  isFreetExists,
-  isValidFreetModifier,
   isValidGroupMember,
-  isFreetNotInGroup,
   isFreetInGroup
 };
