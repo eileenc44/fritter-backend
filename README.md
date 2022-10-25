@@ -179,11 +179,28 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - An array of all freets sorted in descending order by date modified
 
+#### `GET /api/freets/public` - Get all the freets that are not group freets
+
+**Returns**
+
+- An array of all non group freets sorted in descending order by date modified
+
 #### `GET /api/freets?author=USERNAME` - Get freets by author
 
 **Returns**
 
 - An array of freets created by user with username `author`
+
+**Throws**
+
+- `400` if `author` is not given
+- `404` if `author` is not a recognized username of any user
+
+#### `GET /api/freets/public?author=USERNAME` - Get not group freets by author
+
+**Returns**
+
+- An array of not group freets created by user with username `author`
 
 **Throws**
 

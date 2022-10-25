@@ -242,7 +242,7 @@ router.put(
     freetValidator.isValidFreetContent
   ],
   async (req: Request, res: Response) => {
-    const freet = await FreetCollection.addOne(req.session.userId, req.body.content, req.body.anonymous ? true : false);
+    const freet = await FreetCollection.addOne(req.session.userId, req.body.content, req.body.anonymous ? true : false, true);
     const group = await GroupCollection.addFreet(req.params.groupId, freet._id);
     res.status(200).json({
       message: 'You have joined the group.',

@@ -15,6 +15,7 @@ export type Freet = {
   content: string;
   dateModified: Date;
   anonymous: boolean;
+  isGroupFreet: boolean;
 };
 
 export type PopulatedFreet = {
@@ -24,6 +25,7 @@ export type PopulatedFreet = {
   content: string;
   dateModified: Date;
   anonymous: Boolean;
+  isGroupFreet: Boolean;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -54,6 +56,11 @@ const FreetSchema = new Schema<Freet>({
   },
   // If the freet is anonymous
   anonymous: {
+    type: Boolean,
+    required: true
+  },
+  // If the freet is in a group
+  isGroupFreet: {
     type: Boolean,
     required: true
   }

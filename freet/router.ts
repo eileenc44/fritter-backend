@@ -8,6 +8,47 @@ import * as util from './util';
 const router = express.Router();
 
 /**
+ * Get all the freets that are not group freets
+ *
+ * @name GET /api/freets/public
+ *
+ * @return {FreetResponse[]} - A list of all the non group freets sorted in descending
+ *                      order by date modified
+ */
+/**
+ * Get non group freets by author.
+ *
+ * @name GET /api/freets/public?authorId=id
+ *
+ * @return {FreetResponse[]} - An array of freets created by user with id, authorId
+ * @throws {400} - If authorId is not given
+ * @throws {404} - If no user has given authorId
+ *
+ */
+ router.get(
+  '/public',
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Check if authorId query parameter was supplied
+    if (req.query.author !== undefined) {
+      next();
+      return;
+    }
+
+    const allFreets = await FreetCollection.findAllNotGroupFreets();
+    const response = allFreets.map(util.constructFreetResponse);
+    res.status(200).json(response);
+  },
+  [
+    userValidator.isAuthorExists
+  ],
+  async (req: Request, res: Response) => {
+    const authorFreets = await FreetCollection.findAllNotGroupFreetsByUsername(req.query.author as string);
+    const response = authorFreets.map(util.constructFreetResponse);
+    res.status(200).json(response);
+  }
+);
+
+/**
  * Get all the freets
  *
  * @name GET /api/freets

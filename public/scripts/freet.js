@@ -11,8 +11,20 @@ function viewAllFreets(fields) {
     .catch(showResponse);
 }
 
+function viewAllNotGroupFreets(fields) {
+  fetch('/api/freets/public')
+    .then(showResponse)
+    .catch(showResponse);
+}
+
 function viewFreetsByAuthor(fields) {
   fetch(`/api/freets?author=${fields.author}`)
+    .then(showResponse)
+    .catch(showResponse);
+}
+
+function viewNotGroupFreetsByAuthor(fields) {
+  fetch(`/api/freets/public?author=${fields.author}`)
     .then(showResponse)
     .catch(showResponse);
 }
